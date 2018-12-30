@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ExpenseTracker</string>
+    <string name="action_settings">Settings</string>
+    <string-array name="spinner_values">
+        <item>Test</item>
+        <item>Test1</item>
+        <item>Test2</item>
+    </string-array>
+</resources>
