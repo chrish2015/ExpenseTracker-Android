@@ -60,6 +60,7 @@ public class AddExpenseDialog extends DialogFragment {
                 long minDate = datePicker.getMinDate();
 
 
+
                 dismiss();
             }
         });
