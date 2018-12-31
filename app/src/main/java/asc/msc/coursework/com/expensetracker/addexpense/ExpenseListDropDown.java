@@ -9,11 +9,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import asc.msc.coursework.com.expensetracker.dto.Category;
 
 public class ExpenseListDropDown {
 
 
-    public void createDropDown(Spinner spinner, Context context){
+    public void createDropDown(Spinner spinner, Context context, List<Category> categoryList){
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item) {
 
             @Override
@@ -36,7 +39,10 @@ public class ExpenseListDropDown {
         };
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ArrayList<String> strings = new ArrayList<>(Arrays.asList("hi", "hello", "tadfsdaf"));
+        ArrayList<String> strings = new ArrayList<>();
+        for(Category category:categoryList){
+            strings.add(category.getCategoryName());
+        }
         adapter.addAll(strings);
         adapter.add("Select Category");
         spinner.setAdapter(adapter);

@@ -1,17 +1,23 @@
 package asc.msc.coursework.com.expensetracker.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  */
-public class Transaction {
+public class Transaction implements Serializable {
 
     private String name;
     private String comment;
     private Date date;
     private Double value;
-
+    public Transaction(String name,String comment,Date date, double value) {
+        setName(name);
+        setComment(comment);
+        setDate(date);
+        setValue(value);
+    }
     public String getName() {
         return name;
     }

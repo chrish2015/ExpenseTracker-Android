@@ -1,21 +1,26 @@
 package asc.msc.coursework.com.expensetracker.dto;
 
+import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 
  */
-public class Expense extends Transaction{
+public class Expense extends Transaction implements Serializable {
 
-    private int category;
+    private int categoryId;
 
-
-    public int getCategory() {
-        return category;
+    public Expense(String name,String comment,Date date, double value,int categoryId){
+        super(name,comment,date,value);
+        this.categoryId =categoryId;
     }
 
-    public void setCategory(int category) {
-        this.category = category;
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 }

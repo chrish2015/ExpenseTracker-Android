@@ -1,71 +1,35 @@
 package asc.msc.coursework.com.expensetracker.dto;
 
+import java.io.Serializable;
+
+import asc.msc.coursework.com.expensetracker.dao.Serializer;
+
 /**
- * 
+ *
  */
-public class Category {
+public class Category implements Serializable {
 
-    /**
-     * Default constructor
-     */
-    public Category() {
-    }
-
-    /**
-     * 
-     */
-    private int categoryID;
-
-    /**
-     * 
-     */
     private String categoryName;
+    private double budget;
 
-    /**
-     * 
-     */
-    private Double estimatedAmount;
-
-
-    /**
-     *
-     * @param categoryID
-     * @param name
-     * @param amount
-     * @return
-     */
-    public boolean addCategory(int categoryID, String name, Double amount) {
-
-        // TODO implement here
-        return false ;
+    public Category(String categoryName, double budget) {
+        this.categoryName = categoryName;
+        this.budget = budget;
     }
 
-    /**
-     *
-     * @param category
-     * @return
-     */
-    public Boolean updateCategory(Category category) {
-        // TODO implement here
-        return null;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    /**
-     *
-     * @param deletedcat
-     * @return
-     */
-    public Boolean deleteCategory(Category deletedcat) {
-        // TODO implement here
-        return null;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
-    /**
-     * @return
-     */
-    public Category viewCategory() {
-        // TODO implement here
-        return null;
+    public double getBudget() {
+        return budget;
     }
 
+    public void setBudget(double budget) {
+        this.budget = budget;
+    }
 }

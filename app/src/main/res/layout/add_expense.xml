@@ -45,10 +45,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:checkedButton="@id/incomeRadio">
 
                 <RadioButton
-                    android:id="@+id/income"
+                    android:id="@+id/incomeRadio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -56,7 +57,7 @@
                     android:layout_marginLeft="30dp"/>
 
                 <RadioButton
-                    android:id="@+id/expense"
+                    android:id="@+id/expenseRadio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Expense"
@@ -84,15 +85,25 @@
                 android:singleLine="false" />
 
             <Spinner
-                android:id="@+id/category"
+                android:id="@+id/categoryId"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_margin="5dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:padding="2dp"
                 android:background="@drawable/drop_down_shape"
                 android:dropDownSelector="@drawable/ic_add"
                 android:entries="@array/spinner_values"
-                android:padding="1dp"
                 android:scrollbarSize="10dp" />
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Value"
+                android:inputType="numberDecimal" />
 
             <DatePicker
                 android:id="@+id/datePicker"

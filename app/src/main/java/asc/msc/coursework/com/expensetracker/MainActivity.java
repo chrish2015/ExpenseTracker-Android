@@ -16,31 +16,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import asc.msc.coursework.com.expensetracker.addexpense.AddExpenseDialog;
+import asc.msc.coursework.com.expensetracker.dao.DataManipulation;
 import asc.msc.coursework.com.expensetracker.dto.Transaction;
-import asc.msc.coursework.com.expensetracker.expenselist.ExpenseListAdapter;
+import asc.msc.coursework.com.expensetracker.expenselist.ExpenseList;
 import asc.msc.coursework.com.expensetracker.dto.Budget;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView expenseListView;
     public static SharedPreferences sharedPreferences;
-    ExpenseListAdapter.ExpenseListDiplayer expenseListDiplayer = new ExpenseListAdapter.ExpenseListDiplayer();
-
+    DataManipulation dataManipulation=new DataManipulation();
+    public static ExpenseList expenseList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSharedPreferences();
-
-        List<Transaction> initialData = expenseListDiplayer.getInitialData();
+        dataManipulation.dataInitialization();
 
         expenseListView = (RecyclerView) findViewById(R.id.expenseList);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        ArrayList<Budget> list = new ArrayList<>();
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
+        expenseList = new ExpenseList(this, dataManipulation.getTransactions());
         expenseListView.setLayoutManager(manager);
-        expenseListView.setAdapter(new ExpenseListAdapter(this, initialData));
+        expenseListView.setAdapter(expenseList);
 
         setSupportActionBar(toolbar);
 
