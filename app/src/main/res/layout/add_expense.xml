@@ -85,7 +85,7 @@
                 android:singleLine="false" />
 
             <Spinner
-                android:id="@+id/categoryId"
+                android:id="@+id/category"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="15dp"
@@ -98,9 +98,10 @@
                 android:scrollbarSize="10dp" />
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="16dp"
                 android:ems="10"
                 android:hint="Value"
                 android:inputType="numberDecimal" />

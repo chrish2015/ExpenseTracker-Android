@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +24,13 @@ import asc.msc.coursework.com.expensetracker.dto.Budget;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView expenseListView;
+    public static RecyclerView expenseListView;
+    DataManipulation dataManipulation = new DataManipulation();
+
     public static SharedPreferences sharedPreferences;
-    DataManipulation dataManipulation=new DataManipulation();
     public static ExpenseList expenseList;
+    public static TextView totalValue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         expenseListView = (RecyclerView) findViewById(R.id.expenseList);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        totalValue = (TextView) findViewById(R.id.totalValue);
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         expenseList = new ExpenseList(this, dataManipulation.getTransactions());
@@ -55,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showAddExpense() {
         AddExpenseDialog addExpenseDialog = new AddExpenseDialog();
-        addExpenseDialog.show(getSupportFragmentManager(),"AddExpenses");
+        addExpenseDialog.show(getSupportFragmentManager(), "AddExpenses");
     }
 
     @Override

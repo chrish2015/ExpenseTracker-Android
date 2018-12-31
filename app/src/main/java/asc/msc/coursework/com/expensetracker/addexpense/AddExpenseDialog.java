@@ -19,21 +19,24 @@ import java.util.Date;
 import asc.msc.coursework.com.expensetracker.MainActivity;
 import asc.msc.coursework.com.expensetracker.R;
 import asc.msc.coursework.com.expensetracker.dao.DataManipulation;
+import asc.msc.coursework.com.expensetracker.dto.Category;
 import asc.msc.coursework.com.expensetracker.dto.Expense;
 import asc.msc.coursework.com.expensetracker.dto.Income;
 
 public class AddExpenseDialog extends DialogFragment {
 
-    DataManipulation dataManipulation=new DataManipulation();
-    View.OnClickListener onClickListener= new View.OnClickListener() {
+    DataManipulation dataManipulation = new DataManipulation();
+    View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             dismiss();
         }
     };
-    public AddExpenseDialog(){
+
+    public AddExpenseDialog() {
 
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,8 +49,8 @@ public class AddExpenseDialog extends DialogFragment {
         View closeButton = view.findViewById(R.id.closeButton);
         closeButton.setOnClickListener(onClickListener);
         ExpenseListDropDown expenseListDropDown = new ExpenseListDropDown();
-        Spinner category = (Spinner) view.findViewById(R.id.categoryId);
-        expenseListDropDown.createDropDown(category,getContext(),dataManipulation.getCategories());
+        Spinner category = (Spinner) view.findViewById(R.id.category);
+        expenseListDropDown.createDropDown(category, getContext(), dataManipulation.getCategories());
         addExpenseOnClickListner(view);
 
     }
@@ -65,17 +68,22 @@ public class AddExpenseDialog extends DialogFragment {
         final RadioGroup transactionType = (RadioGroup) view.findViewById(R.id.transactionType);
         final RadioButton incomeRadio = (RadioButton) view.findViewById(R.id.incomeRadio);
         final RadioButton expenseRadio = (RadioButton) view.findViewById(R.id.expenseRadio);
+        final TextView value = (TextView) view.findViewById(R.id.value);
+        final Spinner categorySpinner = (Spinner) view.findViewById(R.id.category);
+
         addExpense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String expenseName = expenseNameView.getText().toString();
-                String expenseDetails = expenseDetailsView.getText().toString();
+                String name = expenseNameView.getText().toString();
+                String details = expenseDetailsView.getText().toString();
                 Date minDate = new Date(datePicker.getMinDate());
+                double enteredValue = Double.parseDouble(value.getText().toString());
+                int selectedItemPosition = categorySpinner.getSelectedItemPosition();
 
-                if(transactionType.getCheckedRadioButtonId() == incomeRadio.getId()){
-                    dataManipulation.addTransaction(new Income(expenseName,expenseDetails,minDate,1000d,0));
+                if (transactionType.getCheckedRadioButtonId() == incomeRadio.getId()) {
+                    dataManipulation.addTransaction(new Income(name, details, minDate, enteredValue, selectedItemPosition));
                 } else {
-                    dataManipulation.addTransaction(new Expense(expenseName,expenseDetails,minDate,1000d,0));
+                    dataManipulation.addTransaction(new Expense(name, details, minDate, enteredValue, selectedItemPosition));
                 }
                 MainActivity.expenseList.setArrayList(dataManipulation.getTransactions());
                 MainActivity.expenseList.notifyDataSetChanged();
