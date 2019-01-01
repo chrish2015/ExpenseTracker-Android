@@ -22,6 +22,12 @@ public class DataManipulation {
         setToTransactions(transactions);
     }
 
+    public void addTransaction(Transaction transaction, int i) {
+        ArrayList<Transaction> transactions = getTransactions();
+        transactions.set(i, transaction);
+        setToTransactions(transactions);
+    }
+
     public void addCategories(Category category) {
         ArrayList<Category> categories = getCategories();
         categories.add(category);
@@ -47,8 +53,9 @@ public class DataManipulation {
             setToCategories(categoryList);
         }
         if (transactions == null) {
-            Transaction income = new Income("Example Income", "Salary", new Date(), 10000d, 0);
-            Transaction expense = new Expense("Example Expense", "Salary", new Date(), 10000d, 0);
+            Date date = new Date();
+            Transaction income = new Income("Example Income", "Salary", new ArrayList<Integer>(Arrays.asList(01,00,2019)), 10000d, 0);
+            Transaction expense = new Expense("Example Expense", "Salary", new ArrayList<Integer>(Arrays.asList(01,00,2019)), 10000d, 0);
             ArrayList<Transaction> transactionArrayList = new ArrayList<>(Arrays.asList(income, expense));
             setToTransactions(transactionArrayList);
         }

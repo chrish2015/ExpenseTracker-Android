@@ -1,6 +1,7 @@
 package asc.msc.coursework.com.expensetracker.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -10,7 +11,7 @@ public class Expense extends Transaction implements Serializable {
 
     private int categoryId;
 
-    public Expense(String name,String comment,Date date, double value,int categoryId){
+    public Expense(String name, String comment, ArrayList<Integer> date, double value, int categoryId){
         super(name,comment,date,value);
         this.categoryId =categoryId;
     }

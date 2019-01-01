@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,25 +26,27 @@ import asc.msc.coursework.com.expensetracker.dto.Budget;
 public class MainActivity extends AppCompatActivity {
 
     public static RecyclerView expenseListView;
-    DataManipulation dataManipulation = new DataManipulation();
+    private DataManipulation dataManipulation = new DataManipulation();
 
     public static SharedPreferences sharedPreferences;
     public static ExpenseList expenseList;
     public static TextView totalValue;
-
+    public static FragmentManager supportFragmentManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSharedPreferences();
         dataManipulation.dataInitialization();
+        supportFragmentManager = getSupportFragmentManager();
+
 
         expenseListView = (RecyclerView) findViewById(R.id.expenseList);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         totalValue = (TextView) findViewById(R.id.totalValue);
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
-        expenseList = new ExpenseList(this, dataManipulation.getTransactions());
+        expenseList = new ExpenseList(this, dataManipulation.getTransactions(),dataManipulation.getCategories());
         expenseListView.setLayoutManager(manager);
         expenseListView.setAdapter(expenseList);
 
@@ -60,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showAddExpense() {
         AddExpenseDialog addExpenseDialog = new AddExpenseDialog();
-        addExpenseDialog.show(getSupportFragmentManager(), "AddExpenses");
+        addExpenseDialog.show(supportFragmentManager, "AddExpenses");
     }
 
     @Override

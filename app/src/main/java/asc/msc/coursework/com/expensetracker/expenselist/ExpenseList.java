@@ -3,6 +3,7 @@ package asc.msc.coursework.com.expensetracker.expenselist;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.transition.TransitionManager;
 import android.support.v4.content.ContextCompat;
@@ -10,30 +11,43 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import asc.msc.coursework.com.expensetracker.MainActivity;
+import asc.msc.coursework.com.expensetracker.addexpense.AddExpenseDialog;
+import asc.msc.coursework.com.expensetracker.dao.DataManipulation;
+import asc.msc.coursework.com.expensetracker.dto.Category;
 import asc.msc.coursework.com.expensetracker.dto.Expense;
 import asc.msc.coursework.com.expensetracker.dto.Income;
 import asc.msc.coursework.com.expensetracker.dto.Transaction;
 import asc.msc.coursework.com.expensetracker.R;
+import asc.msc.coursework.com.expensetracker.util.Util;
 
 public class ExpenseList extends RecyclerView.Adapter<ExpenseList.ListHolder> {
 
     private final LayoutInflater layoutInflater;
     private final Context context;
-    private List<Transaction> arrayList;
+    private ArrayList<Transaction> arrayList;
+    private ArrayList<Category> categories;
     double total = 0;
     private int mExpandedPosition = -1;
+    private Util util = new Util();
 
-
-    public ExpenseList(Context context, List<Transaction> list) {
+    public ExpenseList(Context context, ArrayList<Transaction> list, ArrayList<Category> categories) {
         this.context = context;
         this.setArrayList(list);
+        this.setCategories(categories);
         layoutInflater = LayoutInflater.from(context);
+    }
+
+    private void setCategories(ArrayList<Category> categories) {
+        this.categories = categories;
     }
 
     /**
@@ -69,13 +83,13 @@ public class ExpenseList extends RecyclerView.Adapter<ExpenseList.ListHolder> {
         final boolean isExpanded = i == mExpandedPosition;
         if (isExpanded) {
             listHolder.contentTxt.setText("Name    : " + transaction.getName());
-            listHolder.dateTxt.setText("Date           : " + transaction.getDate().toString());
+            listHolder.dateTxt.setText("Date           : " + util.getDateString(transaction.getDate()));
             listHolder.commentTxtView.setText("Comment  : " + transaction.getComment());
             listHolder.value.setTypeface(listHolder.value.getTypeface(), Typeface.BOLD_ITALIC);
 
         } else {
             listHolder.contentTxt.setText(transaction.getName());
-            listHolder.dateTxt.setText(transaction.getDate().toString());
+            listHolder.dateTxt.setText(util.getDateString(transaction.getDate()));
             listHolder.commentTxtView.setText(transaction.getComment());
             listHolder.linearLayoutMain.setBackground(ContextCompat.getDrawable(context, R.drawable.expense_list_click));
             listHolder.value.setTypeface(null, Typeface.BOLD);
@@ -85,21 +99,17 @@ public class ExpenseList extends RecyclerView.Adapter<ExpenseList.ListHolder> {
         if (transaction instanceof Expense) {
             listHolder.value.setTextColor(Color.RED);
             Expense expense = (Expense) transaction;
-            String categoryID = String.valueOf(expense.getCategoryId());
-            if(isExpanded){
+            if (isExpanded) {
                 listHolder.linearLayoutMain.setBackground(ContextCompat.getDrawable(context, R.drawable.expense_list_clicked_red));
-                categoryID+= "Category   : ";
+                listHolder.categoryTxtView.setText("Category   : " + categories.get(expense.getCategoryId()).getCategoryName());
             }
-            listHolder.categoryTxtView.setText(categoryID);
         } else if (transaction instanceof Income) {
             listHolder.value.setTextColor(Color.GREEN);
             Income income = (Income) transaction;
-            String sourceId = String.valueOf(income.getSourceId());
-            if(isExpanded){
+            if (isExpanded) {
                 listHolder.linearLayoutMain.setBackground(ContextCompat.getDrawable(context, R.drawable.expense_list_clicked_green));
-                sourceId+= "Source     : ";
+                listHolder.categoryTxtView.setText("Source       : " + categories.get(income.getSourceId()).getCategoryName());
             }
-            listHolder.categoryTxtView.setText(sourceId);
 
         }
         listHolder.hiddenLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
@@ -110,7 +120,48 @@ public class ExpenseList extends RecyclerView.Adapter<ExpenseList.ListHolder> {
                 mExpandedPosition = isExpanded ? -1 : i;
                 TransitionManager.beginDelayedTransition(MainActivity.expenseListView);
                 notifyDataSetChanged();
-                TextView cmm = (TextView) v.findViewById(R.id.commentTxtView);
+            }
+        });
+
+        listHolder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                arrayList.remove(i);
+                DataManipulation dataManipulation = new DataManipulation();
+                dataManipulation.setToTransactions(arrayList);
+                notifyDataSetChanged();
+                setArrayList(arrayList);
+            }
+        });
+
+        listHolder.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Transaction transaction1 = arrayList.get(i);
+
+                Bundle args = new Bundle();
+                args.putInt(AddExpenseDialog.POSITION, i);
+                args.putString(AddExpenseDialog.NAME, transaction1.getName());
+                args.putString(AddExpenseDialog.COMMENT, transaction1.getComment());
+                args.putIntegerArrayList(AddExpenseDialog.DATE, transaction.getDate());
+                args.putDouble(AddExpenseDialog.VLAUE, transaction1.getValue());
+                if (transaction instanceof Expense) {
+                    int categoryId = ((Expense) transaction1).getCategoryId();
+                    args.putInt(AddExpenseDialog.CATEGORY, ((Expense) transaction1).getCategoryId());
+                    args.putInt(AddExpenseDialog.SOURCE, -1);
+
+                } else {
+                    int categoryId = ((Income) transaction1).getSourceId();
+                    args.putInt(AddExpenseDialog.SOURCE, ((Income) transaction1).getSourceId());
+                    args.putInt(AddExpenseDialog.CATEGORY, -1);
+
+
+                }
+
+                AddExpenseDialog addExpenseDialog = new AddExpenseDialog();
+
+                addExpenseDialog.setArguments(args);
+                addExpenseDialog.show(MainActivity.supportFragmentManager, "AddExpenses");
             }
         });
 
@@ -121,7 +172,7 @@ public class ExpenseList extends RecyclerView.Adapter<ExpenseList.ListHolder> {
         return arrayList.size();
     }
 
-    public void setArrayList(List<Transaction> arrayList) {
+    public void setArrayList(ArrayList<Transaction> arrayList) {
         this.arrayList = arrayList;
         total = 0;
         for (Transaction transaction : arrayList) {
@@ -143,6 +194,8 @@ public class ExpenseList extends RecyclerView.Adapter<ExpenseList.ListHolder> {
         TextView categoryTxtView;
         LinearLayout hiddenLayout;
         LinearLayout linearLayoutMain;
+        ImageButton delete;
+        ImageButton edit;
 
         public ListHolder(@NonNull View itemView) {
             super(itemView);
@@ -154,6 +207,8 @@ public class ExpenseList extends RecyclerView.Adapter<ExpenseList.ListHolder> {
             categoryTxtView = itemView.findViewById(R.id.categoryTxtView);
             hiddenLayout = itemView.findViewById(R.id.hiddenLayout);
             linearLayoutMain = itemView.findViewById(R.id.linearLayoutMain);
+            delete = itemView.findViewById(R.id.delete);
+            edit = itemView.findViewById(R.id.edit);
         }
     }
 }

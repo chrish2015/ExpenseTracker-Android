@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/linearLayoutMain"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:layout_margin="5dp"
     android:background="@drawable/expense_list_click"
-    android:padding="18dp"
-    android:layout_margin="5dp">
+    android:orientation="horizontal"
+    android:padding="18dp">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -51,8 +52,30 @@
                 android:layout_height="wrap_content"
                 android:text="Comment" />
             android:text="Comment" />
-        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
 
+
+            <ImageButton
+                android:id="@+id/edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                app:srcCompat="@drawable/ic_mode_edit" />
+
+            <ImageButton
+                android:id="@+id/delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                app:srcCompat="@drawable/ic_delete"/>
+        </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <TextView
@@ -65,7 +88,6 @@
         android:textAllCaps="false"
         android:textSize="18sp"
         android:textStyle="bold" />
-
 
 
 </LinearLayout>

@@ -1,13 +1,14 @@
 package asc.msc.coursework.com.expensetracker.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * 
  */
 public class Income extends Transaction implements Serializable {
-    public Income(String name,String comment,Date date, double value,int sourceId){
+    public Income(String name, String comment, ArrayList<Integer> date, double value, int sourceId){
         super(name,comment,date,value);
         this.sourceId =sourceId;
     }

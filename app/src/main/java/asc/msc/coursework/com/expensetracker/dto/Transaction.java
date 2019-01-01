@@ -1,6 +1,7 @@
 package asc.msc.coursework.com.expensetracker.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -10,9 +11,9 @@ public class Transaction implements Serializable {
 
     private String name;
     private String comment;
-    private Date date;
+    private ArrayList<Integer> date;
     private Double value;
-    public Transaction(String name,String comment,Date date, double value) {
+    public Transaction(String name, String comment, ArrayList<Integer> date, double value) {
         setName(name);
         setComment(comment);
         setDate(date);
@@ -34,11 +35,11 @@ public class Transaction implements Serializable {
         this.comment = comment;
     }
 
-    public Date getDate() {
+    public ArrayList<Integer> getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(ArrayList<Integer> date) {
         this.date = date;
     }
 
