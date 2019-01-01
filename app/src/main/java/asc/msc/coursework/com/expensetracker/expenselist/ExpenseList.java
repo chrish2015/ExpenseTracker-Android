@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class ExpenseList extends RecyclerView.Adapter<ExpenseList.ListHolder> {
     private final Context context;
     private ArrayList<Transaction> arrayList;
     private ArrayList<Category> categories;
-    double total = 0;
+    BigDecimal total = new BigDecimal(0);
     private int mExpandedPosition = -1;
     private Util util = new Util();
 
@@ -75,8 +76,8 @@ public class ExpenseList extends RecyclerView.Adapter<ExpenseList.ListHolder> {
     public void onBindViewHolder(@NonNull final ListHolder listHolder, final int i) {
         final Transaction transaction = arrayList.get(i);
 
-        Double value = transaction.getValue();
-        total += value;
+        BigDecimal value = new BigDecimal(transaction.getValue().toString());
+        total.add(value);
         listHolder.value.setText(String.valueOf(value));
 
 
@@ -144,7 +145,7 @@ public class ExpenseList extends RecyclerView.Adapter<ExpenseList.ListHolder> {
                 args.putString(AddExpenseDialog.NAME, transaction1.getName());
                 args.putString(AddExpenseDialog.COMMENT, transaction1.getComment());
                 args.putIntegerArrayList(AddExpenseDialog.DATE, transaction.getDate());
-                args.putDouble(AddExpenseDialog.VLAUE, transaction1.getValue());
+                args.putString(AddExpenseDialog.VLAUE, transaction1.getValue().toString());
                 if (transaction instanceof Expense) {
                     int categoryId = ((Expense) transaction1).getCategoryId();
                     args.putInt(AddExpenseDialog.CATEGORY, ((Expense) transaction1).getCategoryId());
@@ -174,14 +175,14 @@ public class ExpenseList extends RecyclerView.Adapter<ExpenseList.ListHolder> {
 
     public void setArrayList(ArrayList<Transaction> arrayList) {
         this.arrayList = arrayList;
-        total = 0;
+        total = new BigDecimal(0);
         for (Transaction transaction : arrayList) {
             if (transaction instanceof Income)
-                total += transaction.getValue();
+                total = total.add(transaction.getValue());
             else
-                total -= transaction.getValue();
+                total = total.subtract(transaction.getValue());
         }
-        MainActivity.totalValue.setText(String.valueOf(total));
+        MainActivity.totalValue.setText(total.toString());
 
     }
 

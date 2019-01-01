@@ -8,17 +8,21 @@ import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -42,7 +46,10 @@ public class AddExpenseDialog extends DialogFragment {
 
     Util util = new Util();
     DataManipulation dataManipulation = new DataManipulation();
+    private String current = "";
+
     View.OnClickListener onClickListener = new View.OnClickListener() {
+
         @Override
         public void onClick(View v) {
             dismiss();
@@ -84,8 +91,39 @@ public class AddExpenseDialog extends DialogFragment {
         final RadioGroup transactionType = (RadioGroup) view.findViewById(R.id.transactionType);
         final RadioButton incomeRadio = (RadioButton) view.findViewById(R.id.incomeRadio);
         final RadioButton expenseRadio = (RadioButton) view.findViewById(R.id.expenseRadio);
-        final TextView value = (TextView) view.findViewById(R.id.value);
+        final EditText value = (EditText) view.findViewById(R.id.value);
         final Spinner categorySpinner = (Spinner) view.findViewById(R.id.category);
+
+        value.setRawInputType(Configuration.KEYBOARD_12KEY);
+
+        value.addTextChangedListener(new TextWatcher() {
+            DecimalFormat dec = new DecimalFormat("0.00");
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().equals(current)) {
+                    value.removeTextChangedListener(this);
+
+                    String formatted = util.getDollerConvertedString(s);
+
+                    current = formatted;
+                    value.setText(formatted);
+                    value.setSelection(formatted.length());
+
+                    value.addTextChangedListener(this);
+                }
+            }
+        });
 
         if (getArguments() != null) {
             if (getArguments().getString(NAME) != null)
@@ -96,8 +134,8 @@ public class AddExpenseDialog extends DialogFragment {
             if (!String.valueOf(integerArrayList).isEmpty()) {
                 datePicker.updateDate(integerArrayList.get(2), integerArrayList.get(1), integerArrayList.get(0));
             }
-            if (!String.valueOf(getArguments().getDouble(VLAUE)).isEmpty() || (String.valueOf(getArguments().getDouble(VLAUE)) != null)) {
-                value.setText(String.valueOf(getArguments().getDouble(VLAUE)));
+            if (!getArguments().getString(VLAUE).isEmpty() || (getArguments().getString(VLAUE) != null)) {
+                value.setText(getArguments().getString(VLAUE));
             }
 
             if (getArguments().getInt(CATEGORY) != -1) {
@@ -118,7 +156,7 @@ public class AddExpenseDialog extends DialogFragment {
                 String details = expenseDetailsView.getText().toString();
 
                 ArrayList<Integer> date = util.getDate(datePicker.getDayOfMonth(), datePicker.getMonth(), datePicker.getYear());
-                double enteredValue = Double.parseDouble(value.getText().toString());
+                BigDecimal enteredValue = new BigDecimal(current.replace("$", "").replace(",", ""));
                 int selectedItemPosition = categorySpinner.getSelectedItemPosition();
 
                 if (transactionType.getCheckedRadioButtonId() == incomeRadio.getId()) {
@@ -139,6 +177,8 @@ public class AddExpenseDialog extends DialogFragment {
             }
         });
     }
+
+
 
 
 }

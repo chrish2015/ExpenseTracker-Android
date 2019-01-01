@@ -1,8 +1,8 @@
 package asc.msc.coursework.com.expensetracker.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  *
@@ -12,8 +12,8 @@ public class Transaction implements Serializable {
     private String name;
     private String comment;
     private ArrayList<Integer> date;
-    private Double value;
-    public Transaction(String name, String comment, ArrayList<Integer> date, double value) {
+    private BigDecimal value;
+    public Transaction(String name, String comment, ArrayList<Integer> date, BigDecimal value) {
         setName(name);
         setComment(comment);
         setDate(date);
@@ -43,11 +43,11 @@ public class Transaction implements Serializable {
         this.date = date;
     }
 
-    public Double getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(Double value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 }

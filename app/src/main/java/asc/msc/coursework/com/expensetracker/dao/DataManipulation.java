@@ -1,6 +1,7 @@
 package asc.msc.coursework.com.expensetracker.dao;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -54,8 +55,8 @@ public class DataManipulation {
         }
         if (transactions == null) {
             Date date = new Date();
-            Transaction income = new Income("Example Income", "Salary", new ArrayList<Integer>(Arrays.asList(01,00,2019)), 10000d, 0);
-            Transaction expense = new Expense("Example Expense", "Salary", new ArrayList<Integer>(Arrays.asList(01,00,2019)), 10000d, 0);
+            Transaction income = new Income("Example Income", "Salary", new ArrayList<Integer>(Arrays.asList(01,00,2019)), new BigDecimal("10000.00"), 0);
+            Transaction expense = new Expense("Example Expense", "Salary", new ArrayList<Integer>(Arrays.asList(01,00,2019)), new BigDecimal("1000.00"), 0);
             ArrayList<Transaction> transactionArrayList = new ArrayList<>(Arrays.asList(income, expense));
             setToTransactions(transactionArrayList);
         }
